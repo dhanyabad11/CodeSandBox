@@ -1,5 +1,6 @@
 import "./EditorButton.css";
 export const EditorButton = ({ isActive }) => {
+    function handleClick() {}
     return (
         <button
             style={{
@@ -8,6 +9,7 @@ export const EditorButton = ({ isActive }) => {
                 borderTop: isActive ? "1px solid #f7b9dd" : "none",
             }}
             className="editor-button"
+            onclick={handleClick}
         >
             file.js
         </button>
