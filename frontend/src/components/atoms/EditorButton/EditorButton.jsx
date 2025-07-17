@@ -1,4 +1,15 @@
 import "./EditorButton.css";
-export const EditorButton = () => {
-    return <button className="editor-buttton">file.js</button>;
+export const EditorButton = ({ isActive }) => {
+    return (
+        <button
+            style={{
+                color: isActive ? "white" : "#6272a4",
+                backgroundColor: isActive ? "#303242" : "#4a4859",
+                borderTop: isActive ? "1px solid #f7b9dd" : "none",
+            }}
+            className="editor-button"
+        >
+            file.js
+        </button>
+    );
 };

@@ -7,7 +7,8 @@ export const ProjectPlayground = () => {
         <div>
             <h2>Project Id: {projectId}</h2>
             <EditorComponent />
-            <EditorButton />
+            <EditorButton isActive={false} />
+            <EditorButton isActive={true} />
         </div>
     );
 };
