@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { EditorComponent } from "../components/molecules/EditorComponent/EditorComponent";
 import { EditorButton } from "../components/atoms/EditorButton/EditorButton";
+import { TreeStructure } from "../components/organisms/TreeStructure/TreeStructure";
 export const ProjectPlayground = () => {
     const { projectId } = useParams();
     return (
@@ -9,6 +10,7 @@ export const ProjectPlayground = () => {
             <EditorComponent />
             <EditorButton isActive={false} />
             <EditorButton isActive={true} />
+            <TreeStructure />
         </div>
     );
 };
