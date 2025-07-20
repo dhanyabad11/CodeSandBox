@@ -4,11 +4,13 @@ import { useTreeStructureStore } from "../../../store/treeStructureStore";
 export const TreeStructure = () => {
     const { TreeStructure, setTreeStructure } = useTreeStructureStore();
 
-    const { projectId } = useParams();
-
     useEffect(() => {
-        setTreeStructure(projectId);
-    }, [projectId, setTreeStructure]);
+        if (TreeStructure) {
+            console.log("tree:", TreeStructure);
+        } else {
+            setTreeStructure();
+        }
+    }, [setTreeStructure, TreeStructure]);
 
     return (
         <div>

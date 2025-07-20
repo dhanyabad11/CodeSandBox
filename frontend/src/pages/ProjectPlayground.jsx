@@ -2,15 +2,24 @@ import { useParams } from "react-router-dom";
 import { EditorComponent } from "../components/molecules/EditorComponent/EditorComponent";
 import { EditorButton } from "../components/atoms/EditorButton/EditorButton";
 import { TreeStructure } from "../components/organisms/TreeStructure/TreeStructure";
+import { useTreeStructureStore } from "../stores/useTreeStructureStore";
+import { useEffect } from "react";
 export const ProjectPlayground = () => {
-    const { projectId } = useParams();
+    const { projectId: projectIdFromUrl } = useParams();
+
+    const { setProjectId, projectId } = useTreeStructureStore();
+
+    useEffect(() => {
+        setProjectId(projectIdFromUrl);
+    }, []);
+
     return (
         <div>
-            <h2>Project Id: {projectId}</h2>
+            Project Id: {projectIdFromUrl}
+            {projectId && <TreeStructure />}
             <EditorComponent />
             <EditorButton isActive={false} />
             <EditorButton isActive={true} />
-            <TreeStructure />
         </div>
     );
 };
