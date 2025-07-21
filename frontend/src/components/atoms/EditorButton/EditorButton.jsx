@@ -9,7 +9,7 @@ export const EditorButton = ({ isActive }) => {
                 borderTop: isActive ? "1px solid #f7b9dd" : "none",
             }}
             className="editor-button"
-            onclick={handleClick}
+            onClick={handleClick}
         >
             file.js
         </button>
