@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTreeStructureStore } from "../../../store/treeStructureStore";
-import { Tree } from "../../molecules/Tree/Tree";
+import { TreeNode } from "../../molecules/TreeNode/TreeNode";
 
 export const TreeStructure = () => {
     const { treeStructure, setTreeStructure } = useTreeStructureStore();
@@ -16,7 +16,7 @@ export const TreeStructure = () => {
     return (
         <div>
             <h1>Tree Structure</h1>
-            <Tree fileFolderData={treeStructure} />
+            <TreeNode fileFolderData={treeStructure} />
         </div>
     );
 };
