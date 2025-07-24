@@ -14,26 +14,27 @@ export const ProjectPlayground = () => {
     }, [projectIdFromUrl, setProjectId]);
 
     return (
-        <div>
-            Project Id: {projectIdFromUrl}
-            {projectId && (
-                <div
-                    style={{
-                        backgroundColor: "#22213c",
-                        paddingRight: "10px",
-                        paddingTop: "0.3vh",
-                        minWidth: "250px",
-                        maxWidth: "25%",
-                        height: "99.7vh",
-                        overFlow: "auto",
-                    }}
-                >
-                    <TreeStructure />
-                </div>
-            )}
-            <EditorComponent />
+        <>
+            <div style={{ display: "flex" }}>
+                {projectId && (
+                    <div
+                        style={{
+                            backgroundColor: "#22213c",
+                            paddingRight: "10px",
+                            paddingTop: "0.3vh",
+                            minWidth: "250px",
+                            maxWidth: "25%",
+                            height: "99.7vh",
+                            overFlow: "auto",
+                        }}
+                    >
+                        <TreeStructure />
+                    </div>
+                )}
+                <EditorComponent />
+            </div>
             <EditorButton isActive={false} />
             <EditorButton isActive={true} />
-        </div>
+        </>
     );
 };
