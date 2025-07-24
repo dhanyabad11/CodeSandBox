@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
+import { FileIcon } from "../../atoms/FileIcon/Fileicon";
+import { CgEnter } from "react-icons/cg";
 
 export const TreeNode = ({ fileFolderData }) => {
     const [visibility, setVisibility] = useState({});
@@ -9,6 +11,10 @@ export const TreeNode = ({ fileFolderData }) => {
             ...visibility,
             [name]: !visibility[name],
         });
+    }
+    function computeExtension(fileFolderData) {
+        const names = fileFolderData.name.split(".");
+        return names[names.length - 1];
     }
 
     return (
@@ -26,8 +32,8 @@ export const TreeNode = ({ fileFolderData }) => {
                             border: "none",
                             cursor: "pointer",
                             outline: "none",
-                            color: "black",
-                            // backgroundColor: "transparent",
+                            color: "white",
+                            backgroundColor: "transparent",
                             paddingTop: "15px",
                             fontSize: "16px",
                         }}
@@ -40,17 +46,20 @@ export const TreeNode = ({ fileFolderData }) => {
                         {fileFolderData.name}
                     </button>
                 ) : (
-                    <p
-                        style={{
-                            paddingTop: "10px",
-                            fontSize: "15px",
-                            cursor: "pointer",
-                            marginLeft: "5px",
-                            color: "black",
-                        }}
-                    >
-                        {fileFolderData.name}
-                    </p>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <FileIcon extension={computeExtension(fileFolderData)} />
+                        <p
+                            style={{
+                                paddingTop: "5px",
+                                fontSize: "15px",
+                                cursor: "pointer",
+                                marginLeft: "5px",
+                                // color: "white",
+                            }}
+                        >
+                            {fileFolderData.name}
+                        </p>
+                    </div>
                 )}
                 {visibility[fileFolderData.name] &&
                     fileFolderData.children &&

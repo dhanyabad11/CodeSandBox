@@ -16,7 +16,21 @@ export const ProjectPlayground = () => {
     return (
         <div>
             Project Id: {projectIdFromUrl}
-            {projectId && <TreeStructure />}
+            {projectId && (
+                <div
+                    style={{
+                        backgroundColor: "#22213c",
+                        paddingRight: "10px",
+                        paddingTop: "0.3vh",
+                        minWidth: "250px",
+                        maxWidth: "25%",
+                        height: "99.7vh",
+                        overFlow: "auto",
+                    }}
+                >
+                    <TreeStructure />
+                </div>
+            )}
             <EditorComponent />
             <EditorButton isActive={false} />
             <EditorButton isActive={true} />
