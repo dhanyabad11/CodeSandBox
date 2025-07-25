@@ -39,7 +39,7 @@ editorNamespace.on("connection", (socket) => {
     let projectId = "123";
 
     if (projectId) {
-        const watcher = chokidar.watch(`./project/${projectId}`, {
+        var watcher = chokidar.watch(`./project/${projectId}`, {
             ignored: (path) => path.includes("node_modules"),
             persistent: true,
 
@@ -55,9 +55,12 @@ editorNamespace.on("connection", (socket) => {
         });
     }
 
-    socket.on("message", () => {
-        console.log("got a message event", data);
-    });
+    handleEditorSocketEvents(socket);
+});
+
+socket.on("disconnect", async () => {
+    await watcher.close();
+    console.log("editor disconnected");
 });
 
 server.listen(PORT, () => {
