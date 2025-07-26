@@ -1,47 +1,56 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
+import { useEditorSocketStore } from "../../../store/editorSocketStore";
+import { useActiveFileTabStore } from "../../../store/activeFileTabStore";
 
 export const EditorComponent = () => {
     const [editorState, setEditorState] = useState({
         theme: null,
     });
 
+    const { editorSocket } = useEditorSocketStore();
+    const { activeFileTab, setActiveFileTab } = useActiveFileTabStore();
+
+    async function downloadTheme() {
+        const response = await fetch("/Dracula.json");
+        const data = await response.json();
+        console.log(data);
+        setEditorState({ ...editorState, theme: data });
+    }
+
+    function handleEditorTheme(editor, monaco) {
+        monaco.editor.defineTheme("dracula", editorState.theme);
+        monaco.editor.setTheme("dracula");
+    }
     useEffect(() => {
-        async function downloadTheme() {
-            try {
-                const response = await fetch("/Dracula.json");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setEditorState((prev) => ({ ...prev, theme: data }));
-            } catch (error) {
-                console.error("Failed to load theme:", error);
-                // Fallback to default theme if custom theme fails
-                setEditorState((prev) => ({ ...prev, theme: "default" }));
-            }
-        }
         downloadTheme();
     }, []);
 
-    function handleEditorTheme(editor, monaco) {
-        if (editorState.theme && editorState.theme !== "default") {
-            monaco.editor.defineTheme("dracula", editorState.theme);
-            monaco.editor.setTheme("dracula");
+    useEffect(() => {
+        if (editorSocket) {
+            editorSocket.on("readFileSuccess", (data) => {
+                console.log("Read file success", data);
+                setActiveFileTab(data.path, data.value);
+            });
+
+            return () => {
+                editorSocket.off("readFileSuccess");
+            };
         }
-    }
+    }, [editorSocket, setActiveFileTab]);
     return (
         <>
             {editorState.theme && (
                 <Editor
                     height={"80vh"}
                     width={"100%"}
-                    defaultLanguage="javascript"
+                    defaultLanguage={undefined}
                     defaultValue="// Welcome to the playground"
                     options={{
                         fontSize: 18,
                         fontFamily: "monospace",
                     }}
+                    value={activeFileTab?.value || "// Welcome to the playground"}
                     onMount={handleEditorTheme}
                 />
             )}
