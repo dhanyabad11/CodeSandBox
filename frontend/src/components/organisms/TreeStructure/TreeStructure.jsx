@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useTreeStructureStore } from "../../../store/treeStructureStore";
 import { TreeNode } from "../../molecules/TreeNode/TreeNode";
+import { useFileContextMenuStore } from "../../../store/fileContextMenuStore";
 
 export const TreeStructure = () => {
     const { treeStructure, setTreeStructure } = useTreeStructureStore();
-
+    useFileContextMenuStore();
     useEffect(() => {
         if (treeStructure) {
             console.log("tree:", treeStructure);
@@ -14,8 +15,8 @@ export const TreeStructure = () => {
     }, [setTreeStructure, treeStructure]);
 
     return (
-        <div>
+        <>
             <TreeNode fileFolderData={treeStructure} />
-        </div>
+        </>
     );
 };

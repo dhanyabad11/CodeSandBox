@@ -25,6 +25,11 @@ export const TreeNode = ({ fileFolderData }) => {
             pathToFileOrFolder: fileFolderData.path,
         });
     }
+
+    function handleContextMenuForFiles(e, path) {
+        e.preventDefault();
+        console.log("Right clicked on", path);
+    }
     useEffect(() => {
         console.log("Visibility changed", visibility);
     }, [visibility]);
@@ -68,6 +73,7 @@ export const TreeNode = ({ fileFolderData }) => {
                                 marginLeft: "5px",
                                 // color: "white",
                             }}
+                            onContextMenu={(e) => handleContextMenuForFiles(e, fileFolderData.path)}
                             onDoubleClick={() => handleDoubleClick(fileFolderData)}
                         >
                             {fileFolderData.name}

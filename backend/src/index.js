@@ -65,7 +65,7 @@ editorNamespace.on("connection", (socket) => {
         console.log("editor disconnected");
     });
 
-    handleEditorSocketEvents(socket);
+    handleEditorSocketEvents(socket, editorNamespace);
 });
 
 server.listen(PORT, () => {

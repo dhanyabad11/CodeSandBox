@@ -23,6 +23,13 @@ export const useEditorSocketStore = create((set) => ({
             console.log("Read file success", data);
             activeFileTabSetter(data.path, data.value);
         });
+
+        incomingSocket?.on("writeFileSucces", (data) => {
+            console.log("Write file success", data);
+            incomingSocket.emit("readFile", {
+                pathFileOrFolder: data.path,
+            });
+        });
         set({
             editorSocket: incomingSocket,
         });
