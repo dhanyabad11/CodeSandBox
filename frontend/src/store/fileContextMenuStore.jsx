@@ -4,6 +4,7 @@ export const useFileContextMenuStore = create((set) => ({
     x: null,
     y: null,
     isOpen: false,
+    file: null,
     setX: (incomingX) => {
         set({
             x: incomingX,
@@ -17,6 +18,11 @@ export const useFileContextMenuStore = create((set) => ({
     setIsOpen: (incomingIsOpen) => {
         set({
             isOpen: incomingIsOpen,
+        });
+    },
+    setFile: (incomingFile) => {
+        set({
+            file: incomingFile,
         });
     },
 }));

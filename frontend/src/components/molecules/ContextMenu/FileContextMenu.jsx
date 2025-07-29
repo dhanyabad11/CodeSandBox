@@ -1,20 +1,34 @@
+import { useEditorSocketStore } from "../../../store/editorSocketStore";
+import { useFileContextMenuStore } from "../../../store/fileContextMenuStore";
+import "./FileContextMenu.css";
+
 export const FileContextMenu = ({ x, y, path }) => {
+    const { setIsOpen } = useFileContextMenuStore();
+    const { editorSocket } = useEditorSocketStore();
+
     function handleFileDelete(e) {
         e.preventDefault();
         console.log("Deleting file at", path);
+        editorSocket.emit("deleteFile", {
+            pathToFileOrFolder: path,
+        });
     }
     return (
         <div
+            onMouseLeave={() => {
+                console.log("Mouse left");
+                setIsOpen(false);
+            }}
+            className="fileContextOptionsWrapper"
             style={{
-                width: "120px",
-                position: "fixed",
                 left: x,
                 top: y,
-                border: "1.5px solid black",
             }}
         >
-            <button onClick={handleFileDelete}>Delete File</button>
-            <button>Rename File</button>
+            <button className="fileContextButton" onClick={handleFileDelete}>
+                Delete File
+            </button>
+            <button className="fileContextButton">Rename File</button>
         </div>
     );
 };
