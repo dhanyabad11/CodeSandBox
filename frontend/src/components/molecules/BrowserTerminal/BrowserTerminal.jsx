@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
@@ -23,12 +24,18 @@ export const BrowserTerminal = () => {
             fontFamily: "Ubuntu Mono",
             convertEol: true,
         });
-    });
+
+        term.open(terminalRef.current);
+        let fitAddon = new FitAddon();
+        term.loadAddon(fitAddon);
+        fitAddon.fit();
+    }, []);
     return (
         <div
+            ref={terminalRef}
             style={{
-                width: "100",
-                height: "100vh",
+                width: "100%",
+                height: "100%",
                 overflow: "hidden",
             }}
         ></div>
