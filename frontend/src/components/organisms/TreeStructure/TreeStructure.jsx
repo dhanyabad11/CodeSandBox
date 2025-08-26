@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useTreeStructureStore } from "../../../store/treeStructureStore";
+import { useEffect } from "react";
 import { TreeNode } from "../../molecules/TreeNode/TreeNode";
 import { useFileContextMenuStore } from "../../../store/fileContextMenuStore";
 import { FileContextMenu } from "../../molecules/ContextMenu/FileContextMenu";
@@ -12,6 +12,7 @@ export const TreeStructure = () => {
         x: fileContextX,
         y: fileContextY,
     } = useFileContextMenuStore();
+
     useEffect(() => {
         if (treeStructure) {
             console.log("tree:", treeStructure);

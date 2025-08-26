@@ -1,14 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { createServer } from "node:http";
-import apiRouter from "./routes/index.js";
 import { Server } from "socket.io";
-
+import apiRouter from "./routes/index.js";
 import { PORT } from "./config/serverConfig.js";
 import chokidar from "chokidar";
-import path from "path";
 import { handleEditorSocketEvents } from "./socketHandlers/editorHandler.js";
-import { handleContainerCreate } from "../containers/handleContainerCreate.js";
 
 const app = express();
 const server = createServer(app);
@@ -23,10 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-io.on("connection", (socket) => {
-    console.log("a user connected");
-});
-
 app.use("/api", apiRouter);
 
 app.get("/ping", (req, res) => {
@@ -38,50 +31,27 @@ const editorNamespace = io.of("/editor");
 editorNamespace.on("connection", (socket) => {
     console.log("editor connected");
 
+    // somehow we will get the projectId from frontend;
     let projectId = socket.handshake.query["projectId"];
 
-    if (projectId) {
-        console.log("Project id received after connection", projectId);
+    console.log("Project id received after connection", projectId);
 
+    if (projectId) {
         var watcher = chokidar.watch(`./projects/${projectId}`, {
             ignored: (path) => path.includes("node_modules"),
-            persistent: true,
-
+            persistent: true /** keeps the watcher in running state till the time app is running */,
             awaitWriteFinish: {
-                stabilityThreshold: 2000,
+                stabilityThreshold: 2000 /** Ensures stability of files before triggering event */,
             },
-            ignoreInitial: true,
+            ignoreInitial: true /** Ignores the initial files in the directory */,
         });
 
         watcher.on("all", (event, path) => {
             console.log(event, path);
-            socket.emit("filechange", { path });
         });
     }
 
-    socket.on("disconnect", async () => {
-        if (watcher) {
-            await watcher.close();
-        }
-        console.log("editor disconnected");
-    });
-
     handleEditorSocketEvents(socket, editorNamespace);
-});
-
-const terminalNamespce = io.of("/terminal");
-terminalNamespce.on("connection", (socket) => {
-    console.log("terminal connected");
-    let projectId = socket.handshake.query["projectId"];
-    socket.on("shell-input", (data) => {
-        console.log("input recieved", data);
-        terminalNamespce.emit("shell-output", data);
-    });
-
-    socket.on("disconnect", () => {
-        console.log("terminal disconnected");
-    });
-    handleContainerCreate(projectId, socket);
 });
 
 server.listen(PORT, () => {

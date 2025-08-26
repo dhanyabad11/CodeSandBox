@@ -1,12 +1,13 @@
 import fs from "fs/promises";
-import { pathToFileURL } from "url";
+import { getContainerPort } from "../containers/handleContainerCreate.js";
 
 export const handleEditorSocketEvents = (socket, editorNamespace) => {
     socket.on("writeFile", async ({ data, pathToFileOrFolder }) => {
         try {
             const response = await fs.writeFile(pathToFileOrFolder, data);
             editorNamespace.emit("writeFileSuccess", {
-                data: "File writen successfully",
+                data: "File written successfully",
+                path: pathToFileOrFolder,
             });
         } catch (error) {
             console.log("Error writing the file", error);
@@ -15,6 +16,7 @@ export const handleEditorSocketEvents = (socket, editorNamespace) => {
             });
         }
     });
+
     socket.on("createFile", async ({ pathToFileOrFolder }) => {
         const isFileAlreadyPresent = await fs.stat(pathToFileOrFolder);
         if (isFileAlreadyPresent) {
@@ -31,6 +33,9 @@ export const handleEditorSocketEvents = (socket, editorNamespace) => {
             });
         } catch (error) {
             console.log("Error creating the file", error);
+            socket.emit("error", {
+                data: "Error creating the file",
+            });
         }
     });
 
@@ -53,8 +58,8 @@ export const handleEditorSocketEvents = (socket, editorNamespace) => {
     socket.on("deleteFile", async ({ pathToFileOrFolder }) => {
         try {
             const response = await fs.unlink(pathToFileOrFolder);
-            socket.emit("deleteFileSucces", {
-                data: "file deleted successfully",
+            socket.emit("deleteFileSuccess", {
+                data: "File deleted successfully",
             });
         } catch (error) {
             console.log("Error deleting the file", error);
@@ -81,7 +86,7 @@ export const handleEditorSocketEvents = (socket, editorNamespace) => {
     socket.on("deleteFolder", async ({ pathToFileOrFolder }) => {
         try {
             const response = await fs.rmdir(pathToFileOrFolder, { recursive: true });
-            socket.emit("deleeFolderSucces", {
+            socket.emit("deleteFolderSuccess", {
                 data: "Folder deleted successfully",
             });
         } catch (error) {
@@ -90,5 +95,13 @@ export const handleEditorSocketEvents = (socket, editorNamespace) => {
                 data: "Error deleting the folder",
             });
         }
+    });
+
+    socket.on("getPort", async ({ containerName }) => {
+        const port = await getContainerPort(containerName);
+        console.log("port data", port);
+        socket.emit("getPortSuccess", {
+            port: port,
+        });
     });
 };

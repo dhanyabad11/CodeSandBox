@@ -1,6 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { act, useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import { useActiveFileTabStore } from "../../../store/activeFileTabStore";
 import { useEditorSocketStore } from "../../../store/editorSocketStore";
 import { extensionToFileType } from "../../../utils/extensionToFileType";
@@ -28,9 +27,11 @@ export const EditorComponent = () => {
     }
 
     function handleChange(value) {
+        // Clear old timer
         if (timerId != null) {
             clearTimeout(timerId);
         }
+        // set the new timer
         timerId = setTimeout(() => {
             const editorContent = value;
             console.log("Sending writefile event");
@@ -45,23 +46,10 @@ export const EditorComponent = () => {
         downloadTheme();
     }, []);
 
-    // useEffect(() => {
-    //     if (editorSocket) {
-    //         editorSocket.on("readFileSuccess", (data) => {
-    //             console.log("Read file success", data);
-    //             setActiveFileTab(data.path, data.value);
-    //         });
-
-    //         return () => {
-    //             editorSocket.off("readFileSuccess");
-    //         };
-    //     }
-    // }, [editorSocket, setActiveFileTab]);
     return (
         <>
             {editorState.theme && (
                 <Editor
-                    height={"100vh"}
                     width={"100%"}
                     defaultLanguage={undefined}
                     defaultValue="// Welcome to the playground"
@@ -71,7 +59,9 @@ export const EditorComponent = () => {
                     }}
                     language={extensionToFileType(activeFileTab?.extension)}
                     onChange={handleChange}
-                    value={activeFileTab?.value || "// Welcome to the playground"}
+                    value={
+                        activeFileTab?.value ? activeFileTab.value : "// Welcome to the playground"
+                    }
                     onMount={handleEditorTheme}
                 />
             )}

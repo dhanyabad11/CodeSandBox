@@ -14,5 +14,6 @@ const extensionToTypeMap = {
 
 export const extensionToFileType = (extension) => {
     if (!extension) return undefined;
+    console.log(extensionToTypeMap[extension]);
     return extensionToTypeMap[extension];
 };

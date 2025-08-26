@@ -1,25 +1,14 @@
 import { create } from "zustand";
 import { useActiveFileTabStore } from "./activeFileTabStore";
 import { useTreeStructureStore } from "./treeStructureStore";
+import { usePortStore } from "./portStore";
 
 export const useEditorSocketStore = create((set) => ({
     editorSocket: null,
     setEditorSocket: (incomingSocket) => {
-        // useEffect(() => {
-        //     if (editorSocket) {
-        //         editorSocket.on("readFileSuccess", (data) => {
-        //             console.log("Read file success", data);
-        //             setActiveFileTab(data.path, data.value);
-        //         });
-
-        //         return () => {
-        //             editorSocket.off("readFileSuccess");
-        //         };
-        //     }
-        // }, [editorSocket, setActiveFileTab]);
-
         const activeFileTabSetter = useActiveFileTabStore.getState().setActiveFileTab;
         const projectTreeStructureSetter = useTreeStructureStore.getState().setTreeStructure;
+        const portSetter = usePortStore.getState().setPort;
 
         incomingSocket?.on("readFileSuccess", (data) => {
             console.log("Read file success", data);
@@ -27,16 +16,22 @@ export const useEditorSocketStore = create((set) => ({
             activeFileTabSetter(data.path, data.value, fileExtension);
         });
 
-        incomingSocket?.on("writeFileSucces", (data) => {
+        incomingSocket?.on("writeFileSuccess", (data) => {
             console.log("Write file success", data);
             // incomingSocket.emit("readFile", {
-            // pathFileOrFolder: data.path,
-            // });
+            //     pathToFileOrFolder: data.path
+            // })
         });
 
-        incomingSocket?.on("deleteFileSucces", () => {
+        incomingSocket?.on("deleteFileSuccess", () => {
             projectTreeStructureSetter();
         });
+
+        incomingSocket?.on("getPortSuccess", ({ port }) => {
+            console.log("port data", port);
+            portSetter(port);
+        });
+
         set({
             editorSocket: incomingSocket,
         });

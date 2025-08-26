@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { FileIcon } from "../../atoms/FileIcon/Fileicon";
-import { CgEnter } from "react-icons/cg";
 import { useEditorSocketStore } from "../../../store/editorSocketStore";
 import { useFileContextMenuStore } from "../../../store/fileContextMenuStore";
 
@@ -23,10 +22,12 @@ export const TreeNode = ({ fileFolderData }) => {
             [name]: !visibility[name],
         });
     }
+
     function computeExtension(fileFolderData) {
         const names = fileFolderData.name.split(".");
         return names[names.length - 1];
     }
+
     function handleDoubleClick(fileFolderData) {
         console.log("Double clicked on", fileFolderData);
         editorSocket.emit("readFile", {
@@ -36,14 +37,15 @@ export const TreeNode = ({ fileFolderData }) => {
 
     function handleContextMenuForFiles(e, path) {
         e.preventDefault();
-        console.log("Right clicked on", path);
+        console.log("Right clicked on", path, e);
         setFile(path);
         setFileContextMenuX(e.clientX);
         setFileContextMenuY(e.clientY);
         setFileContextMenuIsOpen(true);
     }
+
     useEffect(() => {
-        console.log("Visibility changed", visibility);
+        console.log("Visibility chanmged", visibility);
     }, [visibility]);
 
     return (
@@ -54,7 +56,8 @@ export const TreeNode = ({ fileFolderData }) => {
                     color: "white",
                 }}
             >
-                {fileFolderData.children ? (
+                {fileFolderData.children /** If the current node is a folder ? */ ? (
+                    /** If the current node is a folder, render it as a button */
                     <button
                         onClick={() => toggleVisibility(fileFolderData.name)}
                         style={{
@@ -76,17 +79,18 @@ export const TreeNode = ({ fileFolderData }) => {
                         {fileFolderData.name}
                     </button>
                 ) : (
+                    /** If the current node is not a folder, render it as a p */
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
                         <FileIcon extension={computeExtension(fileFolderData)} />
                         <p
                             style={{
-                                marginTop: "8px",
-                                paddingBottom: "15px",
                                 paddingTop: "15px",
+                                paddingBottom: "15px",
+                                marginTop: "8px",
                                 fontSize: "15px",
                                 cursor: "pointer",
                                 marginLeft: "18px",
-                                // color: "white",
+                                // color: "black"
                             }}
                             onContextMenu={(e) => handleContextMenuForFiles(e, fileFolderData.path)}
                             onDoubleClick={() => handleDoubleClick(fileFolderData)}
