@@ -26,7 +26,8 @@ export const BrowserTerminal = () => {
                 cyan: "#8be9fd",
             },
             fontSize: 16,
-            fontFamily: "Fira Code",
+            fontFamily:
+                '"Fira Code", "SF Mono", Monaco, "Cascadia Code", "Ubuntu Mono", "Roboto Mono", Consolas, "Courier New", monospace',
             convertEol: true, // convert CRLF to LF
         });
 
