@@ -51,24 +51,32 @@ export const TreeNode = ({ fileFolderData }) => {
     return (
         fileFolderData && (
             <div
+                className="sidebar-font"
                 style={{
-                    paddingLeft: "15px",
-                    color: "white",
+                    paddingLeft: "8px",
+                    color: "#cccccc",
                 }}
             >
                 {fileFolderData.children /** If the current node is a folder ? */ ? (
                     /** If the current node is a folder, render it as a button */
                     <button
                         onClick={() => toggleVisibility(fileFolderData.name)}
+                        className="sidebar-folder-item"
                         style={{
                             border: "none",
                             cursor: "pointer",
                             outline: "none",
-                            color: "white",
+                            color: "#cccccc",
                             backgroundColor: "transparent",
-                            padding: "15px",
-                            fontSize: "16px",
-                            marginTop: "10px",
+                            padding: "2px 4px",
+                            fontSize: "14px",
+                            fontFamily:
+                                "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
+                            marginTop: "0px",
+                            width: "100%",
+                            textAlign: "left",
+                            display: "flex",
+                            alignItems: "center",
                         }}
                     >
                         {visibility[fileFolderData.name] ? (
@@ -80,17 +88,30 @@ export const TreeNode = ({ fileFolderData }) => {
                     </button>
                 ) : (
                     /** If the current node is not a folder, render it as a p */
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
-                        <FileIcon extension={computeExtension(fileFolderData)} />
+                    <div
+                        className="sidebar-item"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "start",
+                            padding: "1px 4px",
+                        }}
+                    >
+                        <FileIcon
+                            extension={computeExtension(fileFolderData)}
+                            fileName={fileFolderData.name}
+                        />
                         <p
                             style={{
-                                paddingTop: "15px",
-                                paddingBottom: "15px",
-                                marginTop: "8px",
-                                fontSize: "15px",
+                                paddingTop: "2px",
+                                paddingBottom: "2px",
+                                marginTop: "0px",
+                                fontSize: "14px",
+                                fontFamily:
+                                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
                                 cursor: "pointer",
-                                marginLeft: "18px",
-                                // color: "black"
+                                marginLeft: "6px",
+                                color: "#cccccc",
                             }}
                             onContextMenu={(e) => handleContextMenuForFiles(e, fileFolderData.path)}
                             onDoubleClick={() => handleDoubleClick(fileFolderData)}

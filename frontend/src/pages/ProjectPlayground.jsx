@@ -45,17 +45,19 @@ export const ProjectPlayground = () => {
 
     return (
         <>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", backgroundColor: "#1e1e1e", height: "100vh" }}>
                 {projectId && (
                     <div
+                        className="sidebar-font"
                         style={{
-                            backgroundColor: "#333254",
+                            backgroundColor: "#252526",
                             paddingRight: "10px",
                             paddingTop: "0.3vh",
                             minWidth: "250px",
                             maxWidth: "25%",
                             height: "100vh",
                             overflow: "auto",
+                            borderRight: "1px solid #3e3e42",
                         }}
                     >
                         <TreeStructure />
@@ -74,7 +76,7 @@ export const ProjectPlayground = () => {
                                 flexDirection: "column",
                                 width: "100%",
                                 height: "100%",
-                                backgroundColor: "#282a36",
+                                backgroundColor: "#1e1e1e",
                             }}
                         >
                             <Allotment vertical={true}>
