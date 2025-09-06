@@ -1,5 +1,7 @@
 # CodeSandBox
 
+![App Screenshot](frontend/public/createplayground.png)
+
 ![App Screenshot](frontend/public/Screenshot2.png)
 
 CodeSandBox is a full-stack browser-based IDE and development environment. It features a Node.js backend for containerized project management and a React/Vite frontend with Monaco Editor, integrated terminal, and file explorer.
