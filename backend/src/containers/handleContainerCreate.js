@@ -94,3 +94,21 @@ export async function getContainerPort(containerName) {
         }
     }
 }
+
+// Cleanup old containers on server start
+export async function cleanupOldContainers() {
+    try {
+        const containers = await docker.listContainers({ all: true });
+        const sandboxContainers = containers.filter((c) => c.Image === "sandbox");
+
+        console.log(`Found ${sandboxContainers.length} sandbox containers to cleanup`);
+
+        for (const containerInfo of sandboxContainers) {
+            const container = docker.getContainer(containerInfo.Id);
+            await container.remove({ force: true });
+            console.log(`Removed container: ${containerInfo.Names[0]}`);
+        }
+    } catch (error) {
+        console.log("Error cleaning up old containers:", error);
+    }
+}

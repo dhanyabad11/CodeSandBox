@@ -10,6 +10,9 @@ export const Browser = ({ projectId }) => {
 
     const { editorSocket } = useEditorSocketStore();
 
+    // Use the current hostname (works for both localhost and remote servers)
+    const browserUrl = `http://${window.location.hostname}:${port}`;
+
     useEffect(() => {
         if (!port) {
             editorSocket?.emit("getPort", {
@@ -44,12 +47,12 @@ export const Browser = ({ projectId }) => {
                     backgroundColor: "#282a35",
                 }}
                 prefix={<ReloadOutlined onClick={handleRefresh} />}
-                defaultValue={`http://localhost:${port}`}
+                defaultValue={browserUrl}
             />
 
             <iframe
                 ref={browserRef}
-                src={`http://localhost:${port}`}
+                src={browserUrl}
                 style={{
                     width: "100%",
                     height: "95vh",

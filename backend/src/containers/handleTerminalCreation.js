@@ -38,6 +38,18 @@ export const handleTerminalCreation = (container, ws) => {
                         }
                         stream.write(data);
                     });
+
+                    // Cleanup on disconnect
+                    ws.on("close", async () => {
+                        console.log("WebSocket closed, stopping and removing container");
+                        try {
+                            await container.stop();
+                            await container.remove();
+                            console.log("Container cleaned up successfully");
+                        } catch (error) {
+                            console.log("Error cleaning up container:", error);
+                        }
+                    });
                 }
             );
         }

@@ -1,7 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { createServer } from "node:http";
-import { handleContainerCreate, listContainer } from "./containers/handleContainerCreate.js";
+import {
+    handleContainerCreate,
+    listContainer,
+    cleanupOldContainers,
+} from "./containers/handleContainerCreate.js";
 import { WebSocketServer } from "ws";
 import { handleTerminalCreation } from "./containers/handleTerminalCreation.js";
 
@@ -12,9 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-server.listen(4000, () => {
+server.listen(4000, async () => {
     console.log(`Server is running on port ${4000}`);
     console.log(process.cwd());
+
+    // Cleanup any leftover containers from previous sessions
+    await cleanupOldContainers();
 });
 
 const webSocketForTerminal = new WebSocketServer({
