@@ -37,9 +37,8 @@ export const handleContainerCreate = async (projectId, terminalSocket, req, tcpS
             Cmd: ["/bin/bash"],
             name: projectId,
             Tty: true,
-            User: "sandbox",
             Volumes: {
-                "/home/sandbox/app": {},
+                "/app": {},
             },
             ExposedPorts: {
                 "5173/tcp": {},
@@ -48,7 +47,7 @@ export const handleContainerCreate = async (projectId, terminalSocket, req, tcpS
             HostConfig: {
                 Binds: [
                     // mounting the project directory to the container
-                    `${process.cwd()}/projects/${projectId}:/home/sandbox/app`,
+                    `${process.cwd()}/projects/${projectId}:/app`,
                 ],
                 PortBindings: {
                     "5173/tcp": [
